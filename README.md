@@ -1,2 +1,3 @@
-# HSCinHCC
-An Impaired Balance of Tumour-Suppressing and Tumour-Promoting Hepatic Stellate Cell Populations in Liver Fibrosis Contributes to Hepatocarcinogenesis 
+# Opposing roles of hepatic stellate cell subpopulations in hepatocarcinogenesis
+This repository hosts the codes and data for the paper "Opposing roles of hepatic stellate cell subpopulations in hepatocarcinogenesis" ![Link to Nature website](https://www.nature.com/articles/s41586-022-05289-6)
+
