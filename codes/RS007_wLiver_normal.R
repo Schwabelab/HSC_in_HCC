@@ -26,9 +26,28 @@ p2 <- FeatureScatter(rs007, feature1 = "nFeature_RNA", feature2 = "percent.mt") 
 p3 <- FeatureScatter(rs007, feature1 = "nCount_RNA", feature2 = "nFeature_RNA")
 wrap_plots(list(p1,p2,p3),nrow = 2,ncol = 2)
 # keep only the required cells
+temp <- subset(rs007, subset = nFeature_RNA > 500 & nCount_RNA < 25000 & percent.mt < 30)
 
-# Normalize and cluster seurat object
-
+VlnPlot(temp, features = c("nFeature_RNA", "nCount_RNA", "percent.mt","percent.ribo"), ncol = 4, group.by = "orig.ident")
+p1 <- FeatureScatter(temp, feature1 = "nCount_RNA", feature2 = "percent.mt") + NoLegend()
+p2 <- FeatureScatter(temp, feature1 = "nFeature_RNA", feature2 = "percent.mt") + NoLegend()
+p3 <- FeatureScatter(temp, feature1 = "nCount_RNA", feature2 = "nFeature_RNA")
+wrap_plots(list(p1,p2,p3),nrow = 2,ncol = 2)
+temp
+# get the filtered data
+rs007 <- temp
+rs007
+rs007 <- NormalizeData(rs007, normalization.method = "LogNormalize", scale.factor = 10000)
+rs007 <- FindVariableFeatures(rs007, selection.method = "vst", nfeatures = 2000)
+# all.genes <- rownames(rs007)
+rs007 <- ScaleData(rs007, features = VariableFeatures(object = rs007), vars.to.regress = c("nCount_RNA", "percent.mt"))
+rs007 <- RunPCA(rs007, features = VariableFeatures(object = rs007))
+ElbowPlot(rs007, ndims = 50)
+DimHeatmap(rs007, dims = 1:20)
+ndim=13
+rs007 <- FindNeighbors(rs007, dims = 1:ndim)
+rs007 <- FindClusters(rs007)
+rs007 <- RunUMAP(rs007, reduction = "pca", dims = 1:ndim,min.dist = 0.9, spread = 1.745)
 DimPlot(rs007,label = T)
 DimPlot(rs007,label = F)
 
